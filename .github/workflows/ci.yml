@@ -33,7 +33,7 @@ jobs:
         run: flake8 .
 
       - name: Test
-        run: pytest -v
+        run: pytest -v --junitxml=pytest-report.xml
 
   build:
     needs: quality
@@ -84,3 +84,11 @@ jobs:
         run: |
           docker tag app:smoke-test ${{ env.IMAGE_NAME }}
           docker push ${{ env.IMAGE_NAME }}
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: pytest-report-${{ matrix.python-version }}
+          path: pytest-report.xml
+          retention-days: 7
+          if-no-files-found: error
