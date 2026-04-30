@@ -80,10 +80,6 @@ jobs:
           curl --fail http://localhost:8080
           docker stop smoke && docker rm smoke
 
-      - name: Push to registry
-        run: |
-          docker tag app:smoke-test ${{ env.IMAGE_NAME }}
-          docker push ${{ env.IMAGE_NAME }}
       - name: Upload test report
         if: always()
         uses: actions/upload-artifact@v7
@@ -92,3 +88,8 @@ jobs:
           path: pytest-report.xml
           retention-days: 7
           if-no-files-found: error
+
+      - name: Push to registry
+        run: |
+          docker tag app:smoke-test ${{ env.IMAGE_NAME }}
+          docker push ${{ env.IMAGE_NAME }}
