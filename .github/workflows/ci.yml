@@ -46,7 +46,10 @@ jobs:
   build:
     needs: quality
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
+    concurrency:
+      group: build-main
+      cancel-in-progress: false
+    runs-on: ubuntu-latests
     permissions:
       contents: read
       packages: write
